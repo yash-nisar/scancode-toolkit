@@ -93,3 +93,29 @@ class TestAPI(FileBasedTesting):
                 (u'start_line', 11), (u'end_line', 11)])
         ]
         assert expected == cops
+
+    def test_get_license_with_policy_configuration(self):
+        config = self.get_test_loc('api/scancode.yml')
+        test_file = self.get_test_loc('api/LICENSE.txt')
+        result = api.get_licenses(location=test_file, config_location=config)
+        expected = [
+            OrderedDict([
+                (u'key', u'bsd-new'),
+                (u'score', 99.53),
+                (u'short_name', u'BSD-Modified'),
+                (u'category', u'Permissive'),
+                (u'owner', u'Regents of the University of California'),
+                (u'homepage_url', u'http://www.opensource.org/licenses/BSD-3-Clause'),
+                (u'text_url', u'http://www.opensource.org/licenses/BSD-3-Clause'),
+                (u'dejacode_url', u'https://enterprise.dejacode.com/urn/urn:dje:license:bsd-new'),
+                (u'spdx_license_key', u'BSD-3-Clause'),
+                (u'spdx_url', u'https://spdx.org/licenses/BSD-3-Clause'),
+                (u'start_line', 4), (u'end_line', 12),
+                (u'policy', u'Restricted License'),
+                (u'matched_rule', OrderedDict([
+                    (u'identifier', u'bsd-new_158.RULE'),
+                    (u'license_choice', False),
+                    (u'licenses', [u'bsd-new'])
+                ]))
+         ])]
+        assert expected == list(result)

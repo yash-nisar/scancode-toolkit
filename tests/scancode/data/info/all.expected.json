@@ -236,6 +236,7 @@
           "dejacode_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-original-uc",
           "spdx_license_key": "BSD-4-Clause-UC",
           "spdx_url": "https://spdx.org/licenses/BSD-4-Clause-UC",
+          "policy": "",
           "start_line": 25,
           "end_line": 51,
           "matched_rule": {
@@ -327,6 +328,7 @@
           "dejacode_url": "https://enterprise.dejacode.com/urn/urn:dje:license:gpl-2.0",
           "spdx_license_key": "GPL-2.0",
           "spdx_url": "https://spdx.org/licenses/GPL-2.0",
+          "policy": "",
           "start_line": 5,
           "end_line": 12,
           "matched_rule": {
@@ -349,6 +351,7 @@
           "dejacode_url": "https://enterprise.dejacode.com/urn/urn:dje:license:bsd-new",
           "spdx_license_key": "BSD-3-Clause",
           "spdx_url": "https://spdx.org/licenses/BSD-3-Clause",
+          "policy": "",
           "start_line": 5,
           "end_line": 12,
           "matched_rule": {

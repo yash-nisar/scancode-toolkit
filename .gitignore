@@ -66,3 +66,7 @@ docs/_build
 
 # pyenv
 /.python-version
+
+# scancode conf
+.scancode.yml
+

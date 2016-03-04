@@ -97,7 +97,7 @@ DEJACODE_LICENSE_URL = 'https://enterprise.dejacode.com/urn/urn:dje:license:{}'
 SPDX_LICENSE_URL = 'https://spdx.org/licenses/{}'
 
 
-def get_licenses(location, min_score=0, include_text=False, diag=False):
+def get_licenses(location, min_score=0, include_text=False, diag=False, config_location=None):
     """
     Yield mappings of license data detected in the file at `location`.
 
@@ -115,6 +115,10 @@ def get_licenses(location, min_score=0, include_text=False, diag=False):
     from licensedcode.cache import get_index
     from licensedcode.cache import get_licenses_db
     from licensedcode.match import get_full_matched_text
+    from scancode.config import load_conf
+
+    config = load_conf(config_location)
+    policies = config.get('license_policies', {})
 
     idx = get_index()
     licenses = get_licenses_db()
@@ -144,6 +148,9 @@ def get_licenses(location, min_score=0, include_text=False, diag=False):
             result['spdx_url'] = spdx_url
             result['start_line'] = match.start_line
             result['end_line'] = match.end_line
+            #214: Added the ability to return a license policy based on a configuration a .scancode.yml config file
+
+            result['policy'] = policies.get(license_key, '')
             matched_rule = result['matched_rule'] = OrderedDict()
             matched_rule['identifier'] = match.rule.identifier
             matched_rule['license_choice'] = match.rule.license_choice

@@ -92,6 +92,7 @@
           "spdx_url": "https://spdx.org/licenses/BSD-4-Clause-UC",
           "start_line": 25,
           "end_line": 51,
+          "policy": "",
           "matched_rule": {
             "identifier": "bsd-original-uc_4.RULE",
             "license_choice": false,
@@ -169,6 +170,7 @@
           "spdx_url": "https://spdx.org/licenses/GPL-2.0",
           "start_line": 5,
           "end_line": 12,
+          "policy": "",
           "matched_rule": {
             "identifier": "gpl-2.0_or_bsd-new2.RULE",
             "license_choice": true,
@@ -191,6 +193,7 @@
           "spdx_url": "https://spdx.org/licenses/BSD-3-Clause",
           "start_line": 5,
           "end_line": 12,
+          "policy": "",
           "matched_rule": {
             "identifier": "gpl-2.0_or_bsd-new2.RULE",
             "license_choice": true,

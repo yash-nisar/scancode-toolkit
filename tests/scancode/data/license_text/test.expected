@@ -27,6 +27,7 @@
           "spdx_url": "https://spdx.org/licenses/LGPL-2.1",
           "start_line": 1,
           "end_line": 1,
+          "policy": "",
           "matched_rule": {
             "identifier": "lgpl-2.1_38.RULE",
             "license_choice": false,
