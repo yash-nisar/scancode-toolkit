@@ -1,0 +1,14 @@
+about_resource: Django-1.10.1-py2.py3-none-any.whl
+version: 1.10.1
+download_url: https://pypi.python.org/packages/6c/cf/d6ab0edb891865ef86b3e3d7290c162f57c363cf880099bbe94229806f56/Django-1.10.1-py2.py3-none-any.whl#md5=6b50546050424bf01fd9687de3096855
+
+owner: Django Software Foundation
+name: Django
+home_url: http://www.djangoproject.com/
+author_file: Django.AUTHORS
+
+dje_license: bsd-new
+license_text_file: Django.LICENSE
+
+vcs_tool: git
+vcs_repository: https://github.com/django/django.git

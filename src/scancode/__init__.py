@@ -33,6 +33,8 @@ from os.path import exists
 
 from commoncode import fileutils
 
+from scancode.dbconf import configure
+
 scan_src_dir = abspath(dirname(__file__))
 src_dir = dirname(scan_src_dir)
 root_dir = dirname(src_dir)
