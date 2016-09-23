@@ -1,0 +1,14 @@
+about_resource: djangorestframework-3.5.3-py2.py3-none-any.whl
+version: 3.5.3
+download_url: https://pypi.python.org/packages/04/9b/a6667caf6cea9851225b0b7ed158a822f2e9f2338d7222d957ac09c2c0d9/djangorestframework-3.5.3-py2.py3-none-any.whl#md5=99cfc55f8cff592ea3ade608c69a3223
+
+owner: Tom Christie
+name: Django REST framework
+home_url: http://www.django-rest-framework.org/
+
+dje_license: bsd-simplified
+license_text_file: djangorestframework.LICENSE
+copyright: Copyright (c) 2011-2016, Tom Christie
+
+vcs_tool: git
+vcs_repository: https://github.com/tomchristie/django-rest-framework.git
