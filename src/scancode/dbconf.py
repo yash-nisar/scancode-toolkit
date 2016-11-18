@@ -83,6 +83,7 @@ class FakeMigrations(dict):
     inspired by https://github.com/henriquebastos/django-test-without-migrations
     """
     def __getitem__(self, item):
-        return "do not run any migrations"
+        return 'do not run any migrations'
+
     def __contains__(self, item):
         return True
