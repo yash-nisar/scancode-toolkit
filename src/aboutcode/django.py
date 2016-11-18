@@ -137,7 +137,7 @@ class SHA512Field(BaseChecksumField):
 
 def validate_pgpsig(value):
     """
-    Validate a PGPO signature in the form of:
+    Validate a PGP signature in the form of:
     -----BEGIN PGP SIGNATURE-----
     [...]
     -----END PGP SIGNATURE-----
