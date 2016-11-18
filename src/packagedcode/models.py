@@ -131,12 +131,12 @@ class ListType(ListType):
 PackageId = namedtuple('PackageId', 'type name version')
 
 
-class PackageIndentifierType(BaseType):
+class PackageIdentifierType(BaseType):
     """
     Global identifier for a package
     """
     def __init__(self, **kwargs):
-        super(PackageIndentifierType, self).__init__(**kwargs)
+        super(PackageIdentifierType, self).__init__(**kwargs)
 
     def to_primitive(self, value, context=None):
         """
