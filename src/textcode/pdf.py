@@ -32,12 +32,14 @@ from StringIO import StringIO
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfdocument import PDFDocument
-from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.pdfdocument import PDFTextExtractionNotAllowed
+from pdfminer.pdfinterp import PDFResourceManager
+from pdfminer.pdfinterp import PDFPageInterpreter
 from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfparser import PDFParser
 
 
-def get_text_lines(location):
+def get_text_lines(location, max_pages=5):
     """
     Return a list of text lines extracted from a pdf file at `location`.
     May raise exceptions.
@@ -47,13 +49,18 @@ def get_text_lines(location):
     with open(location, 'rb') as pdf_file:
         with contextlib.closing(PDFParser(pdf_file)) as parser:
             document = PDFDocument(parser)
+            if not document.is_extractable:
+                raise PDFTextExtractionNotAllowed('Encrypted PDF document: text extraction is not allowed')
+
             manager = PDFResourceManager()
             with contextlib.closing(TextConverter(manager, extracted_text,
                                                   laparams=laparams)) as extractor:
                 interpreter = PDFPageInterpreter(manager, extractor)
                 pages = PDFPage.create_pages(document)
-                for page in pages:
+                for page_num, page in enumerate(pages, 1):
                     interpreter.process_page(page)
+                    if max_pages and page_num == max_pages:
+                        break
                 extracted_text.seek(0)
                 lines = extracted_text.readlines()
     return lines
