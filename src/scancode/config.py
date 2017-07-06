@@ -27,6 +27,7 @@ from __future__ import print_function, absolute_import
 from os.path import abspath
 from os.path import dirname
 from os.path import exists
+from os.path import isdir
 from os.path import join
 
 from licensedcode import saneyaml
@@ -44,6 +45,8 @@ def load_conf(location=default_location):
     """
     if location is None:
         location = default_location
+    if isdir(location):
+        return {}
     if not location or not exists(location):
         return {}
     with open(location, 'r') as conf:

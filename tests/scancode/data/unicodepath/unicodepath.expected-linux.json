@@ -10,7 +10,8 @@
     "--license-score": 0,
     "--strip-root": true,
     "--ignore": [],
-    "--format": "json"
+    "--format": "json",
+    "--config-location": null
   },
   "files_count": 4,
   "files": [

@@ -4,7 +4,8 @@
     "--info": true,
     "--license-score": 0,
     "--ignore": [],
-    "--format": "json"
+    "--format": "json",
+    "--config-location": null
   },
   "files_count": 11,
   "files": [

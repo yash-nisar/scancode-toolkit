@@ -38,6 +38,7 @@ class TestConf(FileBasedTesting):
         assert load_conf(None) == {}
         assert load_conf('') == {}
         assert load_conf('/wrong/path/') == {}
+        assert load_conf('/') == {}
 
         expected = {
             u'license_policies': OrderedDict(

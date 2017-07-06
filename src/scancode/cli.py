@@ -298,6 +298,8 @@ def validate_exclusive(ctx, exclusive_options):
 @click.option('--verbose', is_flag=True, default=False, help='Print verbose file-by-file progress messages.')
 @click.option('--quiet', is_flag=True, default=False, help='Do not print summary or progress messages.')
 @click.option('-n', '--processes', is_flag=False, default=1, type=int, show_default=True, help='Scan <input> using n parallel processes.')
+@click.option('--config-location', is_flag=False, default=None, type=click.Path(exists=True, readable=True, path_type=str),
+              help='Specifiy scancode config file location.')              
 
 @click.help_option('-h', '--help')
 @click.option('--examples', is_flag=True, is_eager=True, callback=print_examples, help=('Show command examples and exit.'))
@@ -313,7 +315,7 @@ def scancode(ctx,
              copyright, license, package,
              email, url, info,
              license_score, license_text, only_findings, strip_root, full_root,
-             format, ignore, verbose, quiet, processes,
+             format, ignore, verbose, quiet, processes, config_location,
              diag, timeout, *args, **kwargs):
     """scan the <input> file or directory for origin clues and license and save results to the <output_file>.
 
@@ -346,6 +348,7 @@ def scancode(ctx,
         ('--full-root', full_root),
         ('--ignore', ignore),
         ('--format', format),
+        ('--config-location', config_location),
         ('--diag', diag),
     ])
 
@@ -368,7 +371,7 @@ def scancode(ctx,
         if options[key] == False:
             del options[key]
 
-    get_licenses_with_score = partial(get_licenses, min_score=license_score, include_text=license_text, diag=diag)
+    get_licenses_with_score = partial(get_licenses, min_score=license_score, include_text=license_text, diag=diag, config_location=config_location)
 
     # List of scan functions in the same order as "possible_scans".
     scan_functions = [

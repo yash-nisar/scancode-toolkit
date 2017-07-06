@@ -59,10 +59,36 @@ actual command outputs as if using a real command line call.
 """
 
 
+def test_config_location_option(monkeypatch):
+	test_dir = test_env.get_test_loc('conf', copy=True)
+	result_file = test_env.get_temp_file('json')
+	config_location = test_env.get_test_loc('conf/config-location.yml')
+	
+	result = run_scan_click(['--config-location', config_location, test_dir, result_file], monkeypatch)	
+	assert result.exit_code == 0
+	assert 'Scanning done' in result.output
+	assert os.path.exists(result_file)
+	result = open(result_file).read()
+	assert 'config-location.yml' in result
+	
+
+def test_config_location_option_with_verbose(monkeypatch):
+	test_dir = test_env.get_test_loc('conf', copy=True)
+	result_file = test_env.get_temp_file('json')
+	config_location = test_env.get_test_loc('conf/config-location-verbose.yml')
+	
+	result = run_scan_click(['--config-location', config_location, '--verbose', test_dir, result_file], monkeypatch)
+	assert result.exit_code == 0
+	assert 'Scanning done' in result.output
+	assert os.path.exists(result_file)
+	result = open(result_file).read()
+	assert 'config-location-verbose.yml' in result
+
+
 def test_package_option_detects_packages(monkeypatch):
     test_dir = test_env.get_test_loc('package', copy=True)
     result_file = test_env.get_temp_file('json')
-
+    
     result = run_scan_click(['--package', test_dir, result_file], monkeypatch)
     assert result.exit_code == 0
     assert 'Scanning done' in result.output
