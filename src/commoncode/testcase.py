@@ -214,7 +214,7 @@ class FileDrivenTesting(object):
                             for file_loc in files if file_loc.endswith('~')])
 
 
-    def __extract(self, test_path, extract_func=None, verbatim=False):
+    def __extract(self, test_path, extract_func=None, verbatim=False, use_byte_paths=False):
         """
         Given an archive file identified by test_path relative
         to a test files directory, return a new temp directory where the
@@ -226,31 +226,93 @@ class FileDrivenTesting(object):
         target_path = os.path.basename(test_path)
         target_dir = self.get_temp_dir(target_path)
         origin_archive = self.get_test_loc(test_path)
-        extract_func(origin_archive, target_dir, verbatim)
+        if use_byte_paths:
+            target_dir = bytes(target_dir)
+            origin_archive = bytes(origin_archive)
+        extract_func(origin_archive, target_dir,
+                     verbatim=verbatim, use_byte_paths=use_byte_paths)
         return target_dir
 
-    def extract_test_zip(self, test_path):
+    def extract_test_zip(self, test_path, *args, **kwargs):
         return self.__extract(test_path, extract_zip)
 
-    def extract_test_tar(self, test_path, verbatim=False):
-        return self.__extract(test_path, extract_tar, verbatim)
+    def extract_test_tar(self, test_path, verbatim=False, use_byte_paths=False):
+        return self.__extract(test_path, extract_tar,
+                              verbatim, use_byte_paths=use_byte_paths)
 
 
-def extract_tar(location, target_dir, verbatim=False):
+def extract_tar(location, target_dir,
+                verbatim=False, use_byte_paths=False, *args, **kwargs):
     """
     Extract a tar archive at location in the target_dir directory.
     If `verbatim` is True preserve the permissions.
     """
+    if use_byte_paths:
+        location = bytes(location)
+        target_dir = bytes(target_dir)
+
     with open(location, 'rb') as input_tar:
-        tar = tarfile.open(fileobj=input_tar)
-        tarinfos = tar.getmembers()
-        to_extract = []
-        for tarinfo in tarinfos:
-            if tar_can_extract(tarinfo, verbatim):
-                if not verbatim:
-                    tarinfo.mode = 0700
-                to_extract.append(tarinfo)
-        tar.extractall(target_dir, members=to_extract)
+        tar = None
+        try:
+            if use_byte_paths:
+                tar = tarfile.open(fileobj=input_tar, encoding='ASCII')
+            else:
+                tar = tarfile.open(fileobj=input_tar)
+
+            tarinfos = tar.getmembers()
+            to_extract = []
+            for tarinfo in tarinfos:
+                if tar_can_extract(tarinfo, verbatim):
+                    if not verbatim:
+                        tarinfo.mode = 0700
+                    to_extract.append(tarinfo)
+            tar.extractall(target_dir, members=to_extract)
+        finally:
+            if tar:
+                tar.close()
+
+
+def extract_zip(location, target_dir, *args, **kwargs):
+    """
+    Extract a zip archive file at location in the target_dir directory.
+    """
+    if not os.path.isfile(location) and zipfile.is_zipfile(location):
+        raise Exception('Incorrect zip file %(location)r' % locals())
+
+    with zipfile.ZipFile(location) as zipf:
+        for info in zipf.infolist():
+            name = info.filename
+            content = zipf.read(name)
+            target = os.path.join(target_dir, name)
+            if not os.path.exists(os.path.dirname(target)):
+                os.makedirs(os.path.dirname(target))
+            if not content and target.endswith(os.path.sep):
+                if not os.path.exists(target):
+                    os.makedirs(target)
+            if not os.path.exists(target):
+                with open(target, 'wb') as f:
+                    f.write(content)
+
+
+def tar_can_extract(tarinfo, verbatim):
+    """
+    Return True if a tar member can be extracted to handle OS specifics.
+    If verbatim is True, always return True.
+    """
+    if tarinfo.ischr():
+        # never extract char devices
+        return False
+
+    if verbatim:
+        # extract all on all OSse
+        return True
+
+    # FIXME: not sure hard links are working OK on Windows
+    include = tarinfo.type in tarfile.SUPPORTED_TYPES
+    exclude = tarinfo.isdev() or (on_windows and tarinfo.issym())
+
+    if include and not exclude:
+        return True
 
 
 class FileBasedTesting(EnhancedAssertions, FileDrivenTesting):
@@ -288,49 +350,6 @@ class FileBasedTesting(EnhancedAssertions, FileDrivenTesting):
         self.failUnlessEqual(expected, result, msg)
 
     assertLinesEqual = failUnlessFilesLinesEqual
-
-
-def tar_can_extract(tarinfo, verbatim):
-    """
-    Return True if a tar member can be extracted to handle OS specifics.
-    If verbatim is True, always return True.
-    """
-    if tarinfo.ischr():
-        # never extract char devices
-        return False
-
-    if verbatim:
-        # extract all on all OSse
-        return True
-
-    # FIXME: not sure hard links are working OK on Windows
-    include = tarinfo.type in tarfile.SUPPORTED_TYPES
-    exclude = tarinfo.isdev() or (on_windows and tarinfo.issym())
-
-    if include and not exclude:
-        return True
-
-
-def extract_zip(location, target_dir, verbatim=True):
-    """
-    Extract a zip archive file at location in the target_dir directory.
-    """
-    if not os.path.isfile(location) and zipfile.is_zipfile(location):
-        raise Exception('Incorrect zip file %(location)r' % locals())
-
-    with zipfile.ZipFile(location) as zipf:
-        for info in zipf.infolist():
-            name = info.filename
-            content = zipf.read(name)
-            target = os.path.join(target_dir, name)
-            if not os.path.exists(os.path.dirname(target)):
-                os.makedirs(os.path.dirname(target))
-            if not content and target.endswith(os.path.sep):
-                if not os.path.exists(target):
-                    os.makedirs(target)
-            if not os.path.exists(target):
-                with open(target, 'wb') as f:
-                    f.write(content)
 
 
 class dircmp(filecmp.dircmp):

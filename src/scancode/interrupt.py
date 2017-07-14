@@ -85,6 +85,11 @@ if not on_windows:
         except TimeoutError:
             return False, ('ERROR: Processing interrupted: timeout after '
                            '%(timeout)d seconds.' % locals())
+
+        except Exception:
+            import traceback
+            return False, ('ERROR: Unknown error:\n' + traceback.format_exc())
+
         finally:
             signal.setitimer(signal.ITIMER_REAL, 0)
 
@@ -124,6 +129,8 @@ else:
         except (Queue.Empty, multiprocessing.TimeoutError):
             return False, ('ERROR: Processing interrupted: timeout after '
                            '%(timeout)d seconds.' % locals())
+            import traceback
+            return False, ('ERROR: Unknown error:\n' + traceback.format_exc())
         finally:
             try:
                 async_raise(tid, Exception)

@@ -464,6 +464,25 @@ def test_scan_can_handle_weird_file_names():
     check_json_scan(test_env.get_test_loc(expected), result_file)
 
 
+def test_scan_can_handle_non_utf8_file_names_on_posix():
+    test_dir = test_env.extract_test_tar('non_utf8/non_unicode.tgz')
+    result_file = test_env.get_temp_file('json')
+
+    result = run_scan_click(['-i', '--strip-root', test_dir, result_file])
+    assert result.exit_code == 0
+    assert 'Scanning done' in result.output
+
+    # Some info vary on each OS
+    if on_linux:
+        expected = 'non_utf8/expected-linux.json'
+    elif on_mac:
+        expected = 'non_utf8/expected-mac.json'
+    elif on_windows:
+        expected = 'non_utf8/expected-win.json'
+
+    check_json_scan(test_env.get_test_loc(expected), result_file, regen=False)
+
+
 def test_scan_can_run_from_other_directory():
     test_file = test_env.get_test_loc('altpath/copyright.c')
     expected_file = test_env.get_test_loc('altpath/copyright.expected.json')
