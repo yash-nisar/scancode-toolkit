@@ -50,6 +50,7 @@ from commoncode import fileutils
 from commoncode import ignore
 
 import plugincode.output
+import plugincode.post_scan
 
 from scancode import __version__ as version
 
@@ -92,6 +93,13 @@ except NameError:
 
 # this will init the plugins
 plugincode.output.initialize()
+plugincode.post_scan.initialize()
+
+post_scan_plugins = plugincode.post_scan.get_post_scan_plugins()
+options = []
+for name, callback in post_scan_plugins.items():
+    option = click.Option(('--' + name,), is_flag=True, help=callback.__doc__.strip())
+    options.append(option)
 
 
 info_text = '''
@@ -235,7 +243,7 @@ Try 'scancode --help' for help on options and arguments.'''
         """
         Add options returned by plugins to the params list
         """
-        return super(BaseCommand, self).get_params(ctx)
+        return super(BaseCommand, self).get_params(ctx) + options
 
 
 def validate_formats(ctx, param, value):
@@ -411,6 +419,10 @@ def scancode(ctx,
 
         if not quiet:
             echo_stderr('Saving results.', fg='green')
+
+        for name, callback in post_scan_plugins.items():
+            if name in kwargs:
+                results = callback(results)
 
         # FIXME: we should have simpler args: a scan "header" and scan results
         save_results(scanners, only_findings, files_count, results, format, options, input, output_file)
