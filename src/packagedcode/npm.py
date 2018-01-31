@@ -165,7 +165,7 @@ def build_package(package_data, base_dir=None, metafile_name='package.json'):
     if not package.download_urls:
         tarball = public_download_url(package.name, package.version)
         if tarball:
-            package.download_urls.append(tarball)
+            package.download_urls = tarball
 
     return package
 
@@ -359,8 +359,8 @@ def dist_mapper(dist, package):
     """
     package.download_sha1 = dist.get('shasum') or None
     tarball = dist.get('tarball')
-    if tarball and tarball not in package.download_urls:
-        package.download_urls.append(tarball)
+    if tarball and tarball != package.download_urls:
+        package.download_urls = tarball
     return package
 
 

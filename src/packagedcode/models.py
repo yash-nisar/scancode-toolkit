@@ -714,7 +714,7 @@ class Package(BaseModel):
         label='Notes',
         description='Notes, free text about this package')
 
-    download_urls = BaseListType(URIType())
+    download_urls = StringType()
     download_urls.metadata = dict(
         label='Download URLs',
         description='A list of direct download URLs, possibly in SPDX VCS url form. '

@@ -209,7 +209,7 @@ def flatten_scan(scan, headers):
 
                 elif k == 'download_urls':
                     # FIXME: we only keep the first URL for now
-                    pack[nk] = val[0]
+                    pack[nk] = val
 
                 elif k == 'copyrights':
                     # All copyright statements are joined in a single multiline value

@@ -210,7 +210,7 @@ class TestMavenMisc(testcase.FileBasedTesting):
             ('metafile_urls', []),
             ('homepage_url', u'https://github.com/spring-projects/spring-framework'),
             ('notes', None),
-            ('download_urls', []),
+            ('download_urls', None),
             ('download_sha1', None),
             ('download_sha256', None),
             ('download_md5', None),

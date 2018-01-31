@@ -29,7 +29,7 @@
   "metafile_urls": [], 
   "homepage_url": "http://www.jcraft.com/jsch/", 
   "notes": null, 
-  "download_urls": [], 
+  "download_urls": null, 
   "download_sha1": null, 
   "download_sha256": null, 
   "download_md5": null, 

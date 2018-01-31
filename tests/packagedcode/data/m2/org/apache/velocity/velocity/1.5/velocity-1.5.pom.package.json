@@ -60,7 +60,7 @@
   "metafile_urls": [], 
   "homepage_url": "http://velocity.apache.org/engine/releases/velocity-1.5/", 
   "notes": null, 
-  "download_urls": [], 
+  "download_urls": null, 
   "download_sha1": null, 
   "download_sha256": null, 
   "download_md5": null, 

@@ -595,7 +595,7 @@
   "metafile_urls": [], 
   "homepage_url": "http://jakarta.apache.org/commons/collections/", 
   "notes": null, 
-  "download_urls": [], 
+  "download_urls": null, 
   "download_sha1": null, 
   "download_sha256": null, 
   "download_md5": null, 

@@ -66,7 +66,7 @@ class TestRpm(FileBasedTesting):
             ('metafile_urls', []),
             ('homepage_url', u'http://code.google.com/p/libproxy/'),
             ('notes', None),
-            ('download_urls', []),
+            ('download_urls', None),
             ('download_sha1', None),
             ('download_sha256', None),
             ('download_md5', None),
